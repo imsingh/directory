@@ -25,12 +25,12 @@ app.config(function($stateProvider,$urlRouterProvider){
        });
 });
 
-app.controller('MainCtrl', function($scope,$http,$ionicScrollDelegate,$interval,data) {
+app.controller('MainCtrl', function($scope,$http,$ionicScrollDelegate,$interval,data, $ionicPopup) {
       
       $scope.isde = $ionicScrollDelegate.$getByHandle('isde');
       $scope.direction = 'x';
       $scope.reverseElement = 0;    
-      $scope.play = false;
+      //$scope.play = false;
       $scope.scrollposition = 0;
       $scope.toscroll = 1200;
       $scope.feed = data;
@@ -38,6 +38,7 @@ app.controller('MainCtrl', function($scope,$http,$ionicScrollDelegate,$interval,
       $scope.noMoreItemsAvailable = false;
       $scope.number = 5;
       $scope.totalElement = $scope.feed.data.items.length;
+      $scope.settings = {"play" : false,"direction" : "y" ,"currentItemsPerPage" : 1};
      
       var locitems = $scope.items.length;
       for(var i=0;i<5;i++)
@@ -132,13 +133,13 @@ app.controller('MainCtrl', function($scope,$http,$ionicScrollDelegate,$interval,
       }
 
       // Change the number of Items Displayed on screen
-      $scope.currentItemsPerPage =  1;
-      $scope.itemWidth = 100/$scope.currentItemsPerPage + "%"; 
+      $scope.settings.currentItemsPerPage =  1;
+      $scope.itemWidth = 100/$scope.settings.currentItemsPerPage + "%"; 
 
 
       $scope.changeItems = function()
       {
-        $scope.itemWidth = 100/$scope.currentItemsPerPage + "%";
+        $scope.itemWidth = 100/$scope.settings.currentItemsPerPage + "%";
         console.log($scope.isde.resize());
       }
 
@@ -147,8 +148,8 @@ app.controller('MainCtrl', function($scope,$http,$ionicScrollDelegate,$interval,
       var scroll;
       $scope.autoScroll = function(value)
       {
-        console.log($scope.play);
-        if($scope.play == true)
+        console.log($scope.settings.play);
+        if($scope.settings.play == true)
         { 
             scroll = $interval(function(){
             $scope.toscroll = $scope.isde.getScrollView()["__clientWidth"];
@@ -156,7 +157,7 @@ app.controller('MainCtrl', function($scope,$http,$ionicScrollDelegate,$interval,
             $scope.isde.scrollTo($scope.scrollposition,0,true);
             },1500); 
         }
-        else if($scope.play == false)
+        else if($scope.settings.play == false)
         {
           console.log(angular.isDefined(scroll));
           $interval.cancel(scroll);
@@ -165,8 +166,28 @@ app.controller('MainCtrl', function($scope,$http,$ionicScrollDelegate,$interval,
 
       }
 
-      
-      
-    
+      $scope.ShowSettingsPopup = function() {
+          $scope.data = {}
+
+          // An elaborate, custom popup
+          var settingsPopup = $ionicPopup.show({
+            templateUrl: 'templates/popup.html',
+            title: 'Favorhood Directory Settings',
+            scope: $scope,
+            buttons : [
+                  {
+                    text : '<b>Close</b>',
+                    type : 'button-positive',
+                    onTap : function(e)
+                    {
+                      console.log("Closing Popup");
+                      settingsPopup.close();
+                    }
+                  }
+            ]
+          });
+         
+          
+      }; 
 
     });
