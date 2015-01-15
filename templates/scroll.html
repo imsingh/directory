@@ -1,0 +1,160 @@
+<div>
+      <!-- These buttons show up when direction is horizontal -->
+      <i ng-if="settings.direction == 'x'" class="fa fa-angle-left fa-4x slideControls" ng-click="scrollPrev()"></i>
+      <i ng-if="settings.direction == 'x'" class="fa fa-angle-right fa-4x slideControls" ng-click="scrollNext()"></i>
+     
+      <!-- These buttons show up when direction is vertical -->
+      <i ng-if="settings.direction == 'y'" class="fa fa-angle-up fa-4x slideControls" ng-click="scrollPrev()"></i>
+      <i ng-if="settings.direction == 'y'" class="fa fa-angle-down fa-4x slideControls" ng-click="scrollNext()"></i>
+
+      <div style="background:#d14836;color:#fff;position:absolute;top:10px;left:10px;z-index:2000;padding:12px">
+      {{celm}} of {{totalElement}}<br>
+      Place copy of title here: {{item.title}}
+      </div>
+
+      <!-- on-swipe-up and on-swipe-down might not have an effect. Test without these on mobile. Also adjust in duplicate instances at bottom of page. -->
+      <ion-scroll direction="x" ng-if="settings.direction == 'x'" on-drag-up="onDragUp()" on-drag-down="onDragDown()" on-swipe-up="onDragUp()" on-swipe-down="onDragDown()" scroll-to="{{scrollTo}}" delegate-handle="isde" class="item wide-item" on-scroll="onScroll()" ng-style="{'height': '444px'}">
+          <!-- Removed width:33% from the following -->
+          <div style="margin:0px; position:relative;" class="item"
+              collection-repeat="item in items"
+              collection-item-height="itemHeight"
+              collection-item-width="itemWidth"
+              ng-style="{height:444/settings.rows,width:itemWidth}">
+
+             <!--<img ng-if="!item.isLetter" ng-src="http://placekitten.com/60/{{55 + ($index % 10)}}"> -->
+             
+             <img ng-if="lessRows" ng-src="{{item.images[0].large}}" style="width:100%;">
+             <img ng-if="!lessRows" ng-src="{{item.images[0].thumbnail}}"  style="width:100%;max-width:120px">
+              
+              <div class="slide-text">
+                <div class="slide-title">{{item.title}}</div>
+                <div>{{$index+1}} of {{totalElement}}</div>
+              </div>                
+
+          </div>
+      </ion-scroll>
+
+      <ion-scroll direction="y" ng-if="settings.direction == 'y'" on-drag-up="onDragUp()" on-drag-down="onDragDown()" on-swipe-up="onDragUp()" on-swipe-down="onDragDown()" scroll-to="{{scrollTo}}" delegate-handle="isde" class="item wide-item" on-scroll="onScroll()" ng-style="{'height': '444px'}">
+          <!-- Removed width:33% from the following -->
+          <div style="margin:0px; position:relative;" class="item"
+              collection-repeat="item in items"
+              collection-item-height="itemHeight"
+              collection-item-width="itemWidth"
+              ng-style="{height:444/settings.rows,width:itemWidth}">
+
+             <!--<img ng-if="!item.isLetter" ng-src="http://placekitten.com/60/{{55 + ($index % 10)}}"> -->
+             
+             <img ng-if="lessRows" ng-src="{{item.images[0].large}}" style="width:100%;">
+             <img ng-if="!lessRows" ng-src="{{item.images[0].thumbnail}}"  style="width:100%;max-width:120px">
+
+              <div class="slide-text">
+                <div class="slide-title">{{item.title}}</div>
+                <div>{{$index+1}} of {{totalElement}}</div>
+              </div>                
+
+          </div>
+          
+      </ion-scroll>
+
+
+      <ion-infinite-scroll icon="" ng-if="!noMoreItemsAvailable" on-infinite="loadMore()" distance="0%"></ion-infinite-scroll>
+
+      <div style="padding:10px">
+        <div style="float:right;white-space:nowrap">
+            <div class="button-plain icon ion-search" ng-click="searchfield = !searchfield"></div>
+            <div ng-show="searchfield" >
+            <input type="search"  placeholder="Filter results... {{settings.direction}}" ng-model="search" ng-focus="searchFocused = true"
+        ng-blur="searchFocused = false" ng-change="scrollTop()"></div>
+
+            <div class="button-plain icon ion-gear-a" style="margin:0 10px 0 10px" ng-click="ShowSettingsPopup()"></div>
+            <div ng-if="!settings.play" class="button-plain icon ion-play" ng-click="autoScroll('button')"></div>
+            <div ng-if="settings.play" class="button-plain icon ion-pause" ng-click="autoScroll('button')"></div>
+        </div>
+
+        <ol class="ionic-pages">
+            <li
+                ng-repeat="page in getPages() track by $index"
+                ng-class="{'ionic-current-page':(celm % 10) == $index + 1}"
+                ng-click="scrollAtSlide($index * 1002)"
+            ></li>
+            <!--
+            <li ng-class="{'ionic-current-page':(celm % 10) == 1}" ng-click="scrollAtSlide(0)"></li>
+            <li ng-class="{'ionic-current-page':(celm % 10) == 2}" ng-click="scrollAtSlide(1002)"></li>
+            <li ng-class="{'ionic-current-page':(celm % 10) == 3}" ng-click="scrollAtSlide(2004)"></li>
+            <li ng-class="{'ionic-current-page':(celm % 10) == 4}" ng-click="scrollAtSlide(3006)"></li>
+            <li ng-class="{'ionic-current-page':(celm % 10) == 5}" ng-click="scrollAtSlide(4008)"></li>
+            <li ng-class="{'ionic-current-page':(celm % 10) == 6}" ng-click="scrollAtSlide(5010)"></li>
+            <li ng-class="{'ionic-current-page':(celm % 10) == 7}" ng-click="scrollAtSlide(6012)"></li>
+            <li ng-class="{'ionic-current-page':(celm % 10) == 8}" ng-click="scrollAtSlide(7014)"></li>
+            <li ng-class="{'ionic-current-page':(celm % 10) == 9}" ng-click="scrollAtSlide(8016)"></li>
+            <li ng-class="{'ionic-current-page':(celm % 10) == 0}" ng-click="scrollAtSlide(9018)"></li>
+            -->
+        </ol>
+        
+        <div>Place body here: {{item.title}}</div>
+
+        <hr>
+        <div class="button-sm" ng-click="scrollTop()">&lt;&lt;</div> &nbsp;
+        {{celm}} of {{totalElement}} &nbsp;
+        <div class="button-sm" ng-click="scrollBottom()">&gt;&gt;</div>
+        <!--
+        {{itemHeight}}
+            {{itemWidth}}
+        <span ng-if="lessRows">True</span>
+        <span ng-if="!lessRows">False</span>&nbsp;
+        -->
+      </div>
+
+        <!-- <h5 class="title" style="padding-left:8px">{{items.length}}</h5> -->
+
+        
+
+      <br><br>
+      
+      
+      <h5>Duplicate for testing multiple instances</h5>
+
+      Filmstrip:<br>
+      <ion-scroll direction="x" ng-if="settings.direction == 'x'" on-drag-up="onDragUp()" on-drag-down="onDragDown()" on-swipe-up="onDragUp()" on-swipe-down="onDragDown()" scroll-to="{{scrollTo}}" delegate-handle="isde" class="item wide-item" on-scroll="onScroll()" ng-style="{'height': '200px'}">
+          <!-- Removed width:33% from the following -->
+          <div style="margin:0px; position:relative;" class="item"
+              collection-repeat="item in items"
+              collection-item-height="itemHeight"
+              collection-item-width="filmStripWidth"              
+              ng-style="{height:444/settings.rows,width:filmStripWidth}">
+
+             <!--<img ng-if="!item.isLetter" ng-src="http://placekitten.com/60/{{55 + ($index % 10)}}"> -->
+             
+             <img ng-if="lessRows" ng-src="{{item.images[0].large}}" style="width:100%;">
+             <img ng-if="!lessRows" ng-src="{{item.images[0].thumbnail}}"  style="width:100%;max-width:120px">
+              
+              <div class="slide-text">
+                <div class="slide-title">{{$index+1}}. {{item.title}}</div>
+              </div>                
+
+          </div>
+      </ion-scroll>
+      <br>
+
+      Vertical List:<br>
+      <ion-scroll direction="y" ng-if="settings.direction == 'x'" on-drag-up="onDragUp()" on-drag-down="onDragDown()" on-swipe-up="onDragUp()" on-swipe-down="onDragDown()" scroll-to="{{scrollTo}}" delegate-handle="isde" class="item wide-item" on-scroll="onScroll()" ng-style="{'height': '500px'}">
+          <!-- Removed width:33% from the following -->
+          <div style="margin:0px; position:relative;" class="item"
+              collection-repeat="item in items"
+              collection-item-height="itemHeight"
+              collection-item-width="itemWidth"
+              ng-style="{height:444/settings.rows,width:itemWidth}">
+
+             <!--<img ng-if="!item.isLetter" ng-src="http://placekitten.com/60/{{55 + ($index % 10)}}"> -->
+             
+             <img ng-if="lessRows" ng-src="{{item.images[0].large}}" style="width:100%;">
+             <img ng-if="!lessRows" ng-src="{{item.images[0].thumbnail}}"  style="width:100%;max-width:120px">
+              
+              <div class="slide-text">
+                <div class="slide-title">{{$index+1}}. {{item.title}}</div>
+              </div>                
+
+          </div>
+      </ion-scroll>
+
+</div>
