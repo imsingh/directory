@@ -10,12 +10,12 @@ app.filter('range', function() {
     return input;
   };
 });
-app.controller('ScrollCtrl', function ($scope, $http, $ionicScrollDelegate, $interval, data, $ionicPopup, $state, filterFilter) {
+app.controller('ScrollCtrl', function ($scope, $http, $ionicScrollDelegate, $interval, flickr, $ionicPopup, $state, filterFilter) {
     
     $scope.isde = $ionicScrollDelegate.$getByHandle('isde');
     $scope.reverseElement = 0;
     $scope.toscroll = undefined;
-    $scope.feed = data;
+    $scope.feed = flickr;
     $scope.items = [];
     $scope.noMoreItemsAvailable = false;
     $scope.number = 1;
